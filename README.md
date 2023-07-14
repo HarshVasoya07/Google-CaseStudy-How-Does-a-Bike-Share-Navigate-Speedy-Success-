@@ -94,7 +94,7 @@ View(combined_data)
 
 <h2>Analyze</h2>
 
- -With the data processed, I will now analyze it to identify trends and relationships between annual members and casual riders. I'll organize the data for effective analysis and perform calculations to derive meaningful insights.
+ - With the data processed, I will now analyze it to identify trends and relationships between annual members and casual riders. I'll organize the data for effective analysis and perform calculations to derive meaningful insights.
 
 - To analyze the data, I'll calculate descriptive statistics such as mean, median, maximum, and minimum ride lengths for annual members and casual riders. This will give me an understanding of the typical ride duration for each user group.
 
@@ -125,7 +125,7 @@ combined_data %>%
 
 - To share my findings effectively, I'll create visualizations using the 'ggplot2' package in R. These visualizations will help communicate the insights and trends discovered during the analysis.
 
- -I'll create bar charts comparing the number of rides by day of the week and by month for annual members and casual riders. These visualizations will provide a clear understanding of the differences in bike usage patterns between the two user groups.
+- I'll create bar charts comparing the number of rides by day of the week and by month for annual members and casual riders. These visualizations will provide a clear understanding of the differences in bike usage patterns between the two user groups.
 
 - Additionally, I'll create visualizations showcasing the usage of different types of bikes by user type. This will help identify any preferences or trends in bike type preferences among annual members and casual riders.
 
