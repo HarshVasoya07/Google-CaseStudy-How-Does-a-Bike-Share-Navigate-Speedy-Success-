@@ -6,16 +6,91 @@
 Business Objective/Task:
 My objective for this project is to analyze the usage patterns and behavior of annual members and casual riders of Cyclistic bikes in order to design effective marketing strategies to convert casual riders into annual members.
 
-Description:
-As a data analyst at Cyclistic, I have been tasked with analyzing the historical trip data from the previous 12 months. The data includes information on bike rides, such as the ride duration, day of the week, bike type, and membership type (annual or casual). I will utilize various data analysis and visualization techniques to gain insights into how annual members and casual riders use Cyclistic bikes differently.
+As a junior data analyst at Cyclistic, I used the R programming language and several packages, including tidyverse, lubridate, janitor, dplyr, and ggplot2, to analyze and visualize the historical trip data. Here is a summary of the steps I followed:
 
-First, I imported the trip data from the individual monthly datasets and combined them into a single dataset called "combined_data." I then performed data cleaning and removed unnecessary columns related to latitude, longitude, and station information.
+First, I loaded the necessary packages:
 
-Next, I conducted exploratory data analysis by examining the structure and summary statistics of the combined dataset. I also transformed the date and time columns into appropriate formats for further analysis. Additionally, I calculated the ride length in minutes by subtracting the start time from the end time.
+R
+Copy code
+library(tidyverse)
+library(lubridate)
+library(janitor)
+library(dplyr)
+library(ggplot2)
+Next, I imported the trip data from multiple CSV files for the previous 12 months and combined them into a single dataset:
 
-To analyze the differences in bike usage between annual members and casual riders, I aggregated the ride lengths based on membership type using functions such as mean, median, max, and min. I also grouped the data by the day of the week and membership type to determine the number of rides per day for each group.
+R
+Copy code
+trip22_Jul <- read.csv("~/Desktop/Cyclistic Datasets/July2022.csv")
+trip22_Aug <- read.csv("~/Desktop/Cyclistic Datasets/August2022.csv")
+# ... loading data for other months ...
 
-To visualize the data and present the findings, I created several plots using ggplot2. These visualizations include a bar chart showing the total number of rides per day of the week, a bar chart comparing the total number of rides per month for annual members and casual riders, and a bar chart displaying the number of rentals for each bike type based on membership type. Additionally, I created a bar chart to compare the average ride duration per day of the week for annual members and casual riders.
+combined_data <- rbind(trip22_Jul, trip22_Aug, trip22_Sep, trip22_Oct, trip22_Nov, trip22_Dec,
+                       trip23_Jan, trip23_Feb, trip23_Mar, trip23_Apr, trip23_May, trip23_Jun)
+After combining the data, I cleaned it by removing unnecessary columns and renaming them:
+
+R
+Copy code
+combined_data <- combined_data %>%  
+  select(-c(start_lat, start_lng, end_lat, end_lng, start_station_id, end_station_id, end_station_name, start_station_name))
+Then, I transformed the data by adding new columns for date, month, day, year, day of the week, and ride length:
+
+R
+Copy code
+combined_data$date <- as.Date(combined_data$started_at)
+combined_data$month <- format(as.Date(combined_data$date), "%m")
+combined_data$day <- format(as.Date(combined_data$date), "%d")
+combined_data$year <- format(as.Date(combined_data$date), "%Y")
+combined_data$day_of_week <- format(as.Date(combined_data$date), "%A")
+combined_data$time <- format(combined_data$started_at, format = "%H:%M")
+combined_data$time <- as.POSIXct(combined_data$time, format = "%H:%M")
+combined_data$ride_length <- (as.double(difftime(combined_data$ended_at, combined_data$started_at))) / 60
+With the data prepared, I conducted various analyses and created visualizations. Here are a few examples:
+
+Total Number of Rides per Day of the Week:
+R
+Copy code
+combined_data %>%
+  group_by(day_of_week) %>%
+  summarise(number_of_rides = n()) %>%
+  ggplot(aes(x = day_of_week, y = number_of_rides, fill = day_of_week)) +
+  geom_col() +
+  labs(x = 'Day of Week', y = 'Total Number of Rides', title = 'Rides per Day of Week') +
+  scale_fill_discrete(name = 'Day of Week')
+Total Number of Rides per Month by Membership Type:
+R
+Copy code
+combined_data %>%
+  group_by(member_casual, month) %>%
+  summarise(total_rides = n(), average_duration = mean(ride_length)) %>%
+  arrange(member_casual) %>%
+  ggplot(aes(x = month, y = total_rides, fill = member_casual)) +
+  geom_col(position = "dodge") +
+  labs(x = "Month", y = "Total Number of Rides", title = "Rides per Month", fill = "Type of Membership") +
+  scale_y_continuous(breaks = c(100000, 200000, 300000, 400000), labels = c("100K", "200K", "300K", "400K")) +
+  theme(axis.text.x = element_text(angle = 45))
+Number of Rentals per Type of Bike by Membership Type:
+R
+Copy code
+combined_data %>%
+  ggplot(aes(x = rideable_type, fill = member_casual)) +
+  geom_bar(position = "dodge") +
+  labs(x = 'Type of Bike', y = 'Number of Rentals', title = 'Which Bike Works the Most', fill = 'Type of Membership') +
+  scale_y_continuous(breaks = c(500000, 1000000, 1500000), labels = c("500K", "1Mil", "1.5Mil"))
+Average Ride Duration per Day of the Week by Membership Type:
+R
+Copy code
+combined_data %>%
+  mutate(day_of_week = wday(started_at, label = TRUE)) %>%
+  group_by(member_casual, day_of_week) %>%
+  summarise(number_of_rides = n(), average_duration = mean(ride_length)) %>%
+  arrange(member_casual, day_of_week) %>%
+  ggplot(aes(x = day_of_week, y = average_duration, fill = member_casual)) +
+  geom_col(position = "dodge") +
+  labs(x = 'Days of the Week', y = 'Average Duration - Hrs', title = 'Average Ride Time per Week', fill = 'Type of Membership')
+Finally, based on the analysis, I would make three recommendations to convert casual riders into annual members. These recommendations would be supported by the insights gained from the data analysis and visualizations.
+
+This case study demonstrates my ability to analyze data, derive meaningful insights, and make data-driven recommendations to drive business decisions.
 
 Stakeholders:
 
