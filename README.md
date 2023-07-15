@@ -12,7 +12,7 @@ Design a marketing strategy to increase the conversion rate of casual riders to 
 
 - To begin the analysis, I downloaded the previous 12 months(July 2022 - June 2023) of 'Cyclistic' trip data and stored it appropriately on my local machine. I created separate subfolders for the 'CSV' and 'XLS' files and saved the downloaded files accordingly. This ensures proper organization and easy access to the data.
 
-- Next, I loaded the data into R using the 'read.csv' function. I imported each monthly dataset into separate data frames, such as 'trip22_Jul', 'trip22_Aug', etc. Then, I combined all the monthly data frames into one consolidated data frame called c'ombined_data' using the 'rbind' function.
+- Next, I loaded the data into R using the 'read.csv' function. I imported each monthly dataset into separate data frames, such as 'trip22_Jul', 'trip22_Aug', etc. Then, I combined all the monthly data frames into one consolidated data frame called 'combined_data' using the 'rbind' function.
 
 - To ensure data cleanliness and efficiency, I selected only the relevant columns for analysis using the select function. I removed unnecessary columns such as 'latitude', 'longitude', 'station IDs', and 'station names'.
 
